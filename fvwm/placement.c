@@ -1858,6 +1858,19 @@ static int __place_window(
 			exc, pstyle, attr_g, flags, screen_g, start_style,
 			mode, win_opts, reason, pdeltax, pdeltay);
 	}
+
+        // I find it very odd of fvwm to choose to sometimes put
+        // windows very close to the upper left corner but without
+        // snapping to it. I often have to correct for this. I guess
+        // it is my usage or expecations that are peculiar. Thankfully
+        // the code is open and this is a quick fix.
+        if (abs(attr_g->x) < 100 && abs(attr_g->y) < 100) {
+          fprintf(stderr,"fvwm computed corner: %d %d\n", attr_g->x, attr_g->y);
+          attr_g->x = 0;
+          attr_g->y = 0;
+        }
+        fprintf(stderr,"corrected corner: %d %d\n", attr_g->x, attr_g->y);
+                
 	reason->pos.x = attr_g->x;
 	reason->pos.y = attr_g->y;
 
